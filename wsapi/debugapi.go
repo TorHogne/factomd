@@ -388,12 +388,12 @@ func HandleMessageFilter(state interfaces.IState, params interface{}) (interface
 	return h, nil
 }
 
-func getParamMap(params interface{}) (x map[string]interface{},  ok bool) {
+func getParamMap(params interface{}) (x map[string]interface{}, ok bool) {
 	x, ok = params.(map[string]interface{})
 	return x, ok
 }
 
-func HandleWaitMinutes(s interfaces.IState, params interface{})  (interface{}, *primitives.JSONError) {
+func HandleWaitMinutes(s interfaces.IState, params interface{}) (interface{}, *primitives.JSONError) {
 	x, _ := getParamMap(params)
 	min := int(x["minutes"].(float64))
 	newTime := int(s.GetLLeaderHeight())*10 + s.GetCurrentMinute() + min
@@ -410,7 +410,7 @@ func HandleWaitBlocks(state interfaces.IState, params interface{}) (interface{},
 
 	x, _ := getParamMap(params)
 	blks := int(x["blocks"].(float64))
-	waitForQuiet(state, blks+int(state.GetLLeaderHeight()),0)
+	waitForQuiet(state, blks+int(state.GetLLeaderHeight()), 0)
 
 	r := new(success)
 	r.Status = "Success!"
@@ -420,8 +420,7 @@ func HandleWaitBlocks(state interfaces.IState, params interface{}) (interface{},
 func HandleWaitForBlock(state interfaces.IState, params interface{}) (interface{}, *primitives.JSONError) {
 
 	x, _ := getParamMap(params)
-	waitForQuiet(state, int(x["block"].(float64)),0)
-
+	waitForQuiet(state, int(x["block"].(float64)), 0)
 
 	r := new(success)
 	r.Status = "Success!"
@@ -464,8 +463,7 @@ func waitForQuiet(s interfaces.IState, newBlock int, newMinute int) {
 	}
 
 	// wait for the right minute
-	for s.GetCurrentMinute()!= newMinute {
+	for s.GetCurrentMinute() != newMinute {
 		time.Sleep(sleepTime * time.Millisecond) // wake up and about 4 times per minute
 	}
 }
-
